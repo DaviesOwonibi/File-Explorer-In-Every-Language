@@ -90,16 +90,14 @@ class gui extends JPanel implements ActionListener {
 
     for (final File file : filelist) {
       if (file.isDirectory()) {
-        // Submit a task to the thread pool to cache the subdirectory
         executorService.submit(() -> {
           DefaultMutableTreeNode tempDmtn = new DefaultMutableTreeNode(
             file.getName()
           );
           fillTree(tempDmtn, file.getAbsolutePath());
-          SwingUtilities.invokeLater(() -> root.add(tempDmtn)); // Update the tree model on the Event Dispatch Thread
+          SwingUtilities.invokeLater(() -> root.add(tempDmtn));
         });
       } else {
-        // Cache file information (on the Event Dispatch Thread)
         SwingUtilities.invokeLater(() -> {
           DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(
             file.getName()
@@ -177,7 +175,6 @@ class gui extends JPanel implements ActionListener {
       } else if (fileSize >= 1000000000000000L) {
         sizeBuilder.append(fileSize / 1000000000000000L).append(" petabytes");
       } else {
-        // Add "0." to represent less than 1 kilobyte
         sizeBuilder.append("0.").append(fileSize / 100).append(" kilobytes");
       }
 
